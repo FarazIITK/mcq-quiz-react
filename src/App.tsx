@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import questions from './Assets/question.json';
 
 interface IQuestionData {
   category: string;
@@ -9,18 +10,28 @@ interface IQuestionData {
   correct_answer: string;
   incorrect_answers: [string, string, string];
 }
+// const questions: IQuestionData[] = require('./Assets/question.json');
 
 function App() {
-  const questions: IQuestionData[] = require('./Assets/question.json');
-
   const [currentQuestion, setCurrentQuestion] = useState<number>(1);
   const [isTestCompleted, setIsTestCompleted] = useState<boolean>(false);
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [incorrectAnswers, setIncorrectAnswers] = useState<number>(0);
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
 
-  const optionButtonHandler = (e: any) => {
-    console.log(e.target.innerText);
+  const optionButtonHandler = (e: React.MouseEvent<HTMLElement>) => {
+    console.log((e.target as any).innerText);
+    const selectedOption = (e.target as any).innerText;
+    if (
+      selectedOption ===
+      decodeURIComponent(questions[currentQuestion - 1].correct_answer)
+    ) {
+      const updatedCorrectAnswers = correctAnswers + 1;
+      setCorrectAnswers(updatedCorrectAnswers);
+    } else {
+      const updatedIncorrectAnswers = incorrectAnswers + 1;
+      setIncorrectAnswers(updatedIncorrectAnswers);
+    }
     setIsAnswerGiven(true);
   };
 
@@ -49,7 +60,6 @@ function App() {
       questions[currentQuestion - 1].correct_answer,
       ...questions[currentQuestion - 1].incorrect_answers
     ];
-    console.log('Options: ', options);
     const shuffledOptions = shuffleArray(options);
 
     return (
