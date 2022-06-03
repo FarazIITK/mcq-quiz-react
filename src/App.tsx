@@ -18,6 +18,7 @@ function App() {
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [incorrectAnswers, setIncorrectAnswers] = useState<number>(0);
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
+  const [resultMessageText, setResultMessageText] = useState<string>('');
 
   const optionButtonHandler = (e: React.MouseEvent<HTMLElement>) => {
     console.log((e.target as any).innerText);
@@ -28,9 +29,11 @@ function App() {
     ) {
       const updatedCorrectAnswers = correctAnswers + 1;
       setCorrectAnswers(updatedCorrectAnswers);
+      setResultMessageText('Correct!');
     } else {
       const updatedIncorrectAnswers = incorrectAnswers + 1;
       setIncorrectAnswers(updatedIncorrectAnswers);
+      setResultMessageText('Sorry!');
     }
     setIsAnswerGiven(true);
   };
@@ -66,13 +69,15 @@ function App() {
       <div>
         {shuffledOptions.map((element) => {
           return (
-            <button disabled={isAnswerGiven} onClick={optionButtonHandler}>
+            <button
+              disabled={isAnswerGiven}
+              onClick={optionButtonHandler}
+              key={element}
+            >
               {decodeURIComponent(element)}
             </button>
           );
         })}
-        {/* <h2>vdkjvkj</h2>
-        <h2>dbjb</h2> */}
       </div>
     );
   };
@@ -96,23 +101,11 @@ function App() {
             {decodeURIComponent(questions[currentQuestion - 1].question)}
           </p>
           {renderOptions()}
-          {/* <button onClick={optionButtonHandler} disabled={isAnswerGiven}>
-            Option 1
-          </button>
-          <button onClick={optionButtonHandler} disabled={isAnswerGiven}>
-            Option 1
-          </button>
-          <button onClick={optionButtonHandler} disabled={isAnswerGiven}>
-            Option 1
-          </button>
-          <button onClick={optionButtonHandler} disabled={isAnswerGiven}>
-            Option 1
-          </button> */}
 
           {isAnswerGiven && (
             <button onClick={continueButtonHandler}>Continue</button>
           )}
-
+          {isAnswerGiven && <h2>{resultMessageText}</h2>}
           <br />
           <br />
           <br />
