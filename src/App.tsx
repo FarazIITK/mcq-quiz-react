@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import questions from './Assets/question.json';
 import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
+import { FaStar } from 'react-icons/fa';
 
 interface IQuestionData {
   category: string;
@@ -86,6 +87,37 @@ function App() {
     );
   };
 
+  const renderDifficultyWithStars = () => {
+    let starColorCount: number = 0;
+    if (
+      decodeURIComponent(questions[currentQuestion - 1].difficulty) === 'easy'
+    ) {
+      starColorCount = 1;
+    } else if (
+      decodeURIComponent(questions[currentQuestion - 1].difficulty) === 'medium'
+    ) {
+      starColorCount = 2;
+    } else if (
+      decodeURIComponent(questions[currentQuestion - 1].difficulty) === 'hard'
+    ) {
+      starColorCount = 3;
+    }
+    return (
+      <span>
+        {Array(5)
+          .fill(undefined)
+          .map((_, index) => (
+            <FaStar color={index < starColorCount ? 'orange' : 'gray'} />
+          ))}
+        {/* {Array(5 - starColorCount)
+          .fill(undefined)
+          .map(() => (
+            <FaStar color={'gray'} />
+          ))} */}
+      </span>
+    );
+  };
+
   return (
     <div className="App">
       <h1>MCQ Quiz</h1>
@@ -102,6 +134,7 @@ function App() {
             Difficulty:{' '}
             {decodeURIComponent(questions[currentQuestion - 1].difficulty)}
           </h3>
+          {renderDifficultyWithStars()}
           <p>
             <b>Question:</b>
             {decodeURIComponent(questions[currentQuestion - 1].question)}
