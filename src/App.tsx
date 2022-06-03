@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import questions from './Assets/question.json';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 
 interface IQuestionData {
   category: string;
@@ -19,6 +20,7 @@ function App() {
   const [incorrectAnswers, setIncorrectAnswers] = useState<number>(0);
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
   const [resultMessageText, setResultMessageText] = useState<string>('');
+  const [percentCompleted, setPercentCompleted] = useState<number>(0);
 
   const optionButtonHandler = (e: React.MouseEvent<HTMLElement>) => {
     console.log((e.target as any).innerText);
@@ -46,6 +48,8 @@ function App() {
       setCurrentQuestion(newQuestion);
       setIsAnswerGiven(false);
     }
+    console.log('Percent: ', (currentQuestion / questions.length) * 100);
+    setPercentCompleted(currentQuestion / questions.length);
   };
 
   const shuffleArray = (array: string[]) => {
@@ -85,9 +89,11 @@ function App() {
   return (
     <div className="App">
       <h1>MCQ Quiz</h1>
+      <ProgressIndicator percentComplete={percentCompleted} />
 
       {!isTestCompleted && (
         <div>
+          <br />
           <h1>
             Question {currentQuestion} of {questions.length}
           </h1>
