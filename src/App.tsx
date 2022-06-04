@@ -1,22 +1,13 @@
 import { useState } from 'react';
-import './App.css';
+import './App.scss';
 import questions from './Assets/question.json';
 import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 import { FaStar } from 'react-icons/fa';
 import { ProgressBar } from 'react-bootstrap';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import { shuffleArray } from './Utils/UtilityFunctions';
 
-// interface IQuestionData {
-//   category: string;
-//   type: string;
-//   difficulty: string;
-//   question: string;
-//   correct_answer: string;
-//   incorrect_answers: [string, string, string];
-// }
-// const questions: IQuestionData[] = require('./Assets/question.json');
-
-function App() {
+const App = () => {
   const [currentQuestion, setCurrentQuestion] = useState<number>(1);
   const [isTestCompleted, setIsTestCompleted] = useState<boolean>(false);
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
@@ -57,16 +48,6 @@ function App() {
     console.log('Percent: ', (currentQuestion / questions.length) * 100);
   };
 
-  const shuffleArray = (array: string[]) => {
-    for (var i = array.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-    }
-    return array;
-  };
-
   const renderOptions = () => {
     const options = [
       questions[currentQuestion - 1].correct_answer,
@@ -75,7 +56,7 @@ function App() {
     const shuffledOptions = shuffleArray(options);
 
     return (
-      <div>
+      <div className="options-cont">
         {shuffledOptions.map((element) => {
           return (
             <button
@@ -107,13 +88,13 @@ function App() {
       starColorCount = 3;
     }
     return (
-      <span>
+      <small>
         {Array(starColorCount)
           .fill(undefined)
           .map((_, index) => (
             <FaStar color="orange" />
           ))}
-      </span>
+      </small>
     );
   };
 
@@ -124,58 +105,87 @@ function App() {
       {!isTestCompleted && (
         <div className="test-div">
           <br />
-          <ProgressIndicator percentComplete={percentCompleted / 100} />
-          <h1>
-            Question {currentQuestion} of {questions.length}
-          </h1>
-          <h3>{decodeURIComponent(questions[currentQuestion - 1].category)}</h3>
-          {renderDifficultyWithStars()}
-          <p>
-            <b>Question:</b>
-            {decodeURIComponent(questions[currentQuestion - 1].question)}
-          </p>
-          {renderOptions()}
-
-          {isAnswerGiven && (
-            <button onClick={continueButtonHandler}>Next Question</button>
-          )}
-          {isAnswerGiven && <h2>{resultMessageText}</h2>}
-          <br />
-          <br />
-          <br />
-          <h4>Your score: {(correctAnswers / questions.length) * 100}%</h4>
-          <h4>Maximum Score: {(currentQuestion / questions.length) * 100}%</h4>
-          <br />
-          <ProgressBar>
-            <ProgressBar
-              striped
-              variant="success"
-              now={percentCompleted * (correctAnswers / currentQuestion)}
-              key={1}
-            />
-            <ProgressBar
-              variant="danger"
-              now={percentCompleted * (incorrectAnswers / currentQuestion)}
-              key={2}
-            />
-            <ProgressBar
-              variant="warning"
-              now={
-                100 -
-                ((correctAnswers + incorrectAnswers) / questions.length) * 100
+          <ProgressIndicator
+            percentComplete={percentCompleted / 100}
+            styles={{
+              progressBar: {
+                height: '20px'
               }
-              key={3}
-            />
-          </ProgressBar>
+            }}
+          />
+          <section className="test-content">
+            <header className="question-header">
+              <h3>
+                Question {currentQuestion} of {questions.length}
+              </h3>
+              <small>
+                {decodeURIComponent(questions[currentQuestion - 1].category)}
+              </small>
+              {renderDifficultyWithStars()}
+            </header>
+            <section className="question-section">
+              <p>
+                {/* <b>Question:</b> */}
+                {decodeURIComponent(questions[currentQuestion - 1].question)}
+              </p>
+              {renderOptions()}
+            </section>
+            <section className="prompt-cont">
+              {isAnswerGiven && <h2>{resultMessageText}</h2>}
+              {isAnswerGiven && (
+                <button onClick={continueButtonHandler}>
+                  {currentQuestion < questions.length
+                    ? 'Next Question'
+                    : 'End Test'}
+                </button>
+              )}
+            </section>
+            <br />
+            <h4>
+              Your score:{' '}
+              {((100 * correctAnswers) / questions.length).toFixed(2)}%
+            </h4>
+            <h4>
+              Maximum Score:{' '}
+              {((100 * currentQuestion) / questions.length).toFixed(2)}%
+            </h4>
+            <br />
+            <ProgressBar>
+              <ProgressBar
+                variant="success"
+                now={percentCompleted * (correctAnswers / currentQuestion)}
+                key={1}
+              />
+              <ProgressBar
+                variant="danger"
+                now={percentCompleted * (incorrectAnswers / currentQuestion)}
+                key={2}
+              />
+              <ProgressBar
+                variant="grey"
+                now={
+                  100 -
+                  ((correctAnswers + incorrectAnswers) / questions.length) * 100
+                }
+                key={3}
+              />
+            </ProgressBar>
+          </section>
         </div>
       )}
       {isTestCompleted && (
         <div>
           <h1>Test Completed</h1>
+          <h3>Total Questions: {questions.length}</h3>
+          <h3>Correct Answers: {correctAnswers}</h3>
+          <h3>Incorrect Answers: {incorrectAnswers}</h3>
+          <h2>
+            Score: {((correctAnswers / questions.length) * 100).toFixed(2)}/100
+          </h2>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default App;
