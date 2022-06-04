@@ -89,10 +89,10 @@ const App = () => {
     }
     return (
       <small>
-        {Array(starColorCount)
+        {Array(3)
           .fill(undefined)
           .map((_, index) => (
-            <FaStar color="orange" />
+            <FaStar color={index < starColorCount ? 'orange' : 'grey'} />
           ))}
       </small>
     );
