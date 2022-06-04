@@ -100,7 +100,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>MCQ Quiz</h1>
+      <h1 className="heading-txt">MCQ Quiz</h1>
 
       {!isTestCompleted && (
         <div className="test-div">
@@ -131,7 +131,15 @@ const App = () => {
               {renderOptions()}
             </section>
             <section className="prompt-cont">
-              {isAnswerGiven && <h2>{resultMessageText}</h2>}
+              {isAnswerGiven && (
+                <h1
+                  className={
+                    resultMessageText === 'Sorry!' ? 'red-class' : 'green-class'
+                  }
+                >
+                  {resultMessageText}
+                </h1>
+              )}
               {isAnswerGiven && (
                 <button onClick={continueButtonHandler}>
                   {currentQuestion < questions.length
@@ -141,16 +149,18 @@ const App = () => {
               )}
             </section>
             <br />
-            <h4>
-              Your score:{' '}
-              {((100 * correctAnswers) / questions.length).toFixed(2)}%
-            </h4>
-            <h4>
-              Maximum Score:{' '}
-              {((100 * currentQuestion) / questions.length).toFixed(2)}%
-            </h4>
-            <br />
-            <ProgressBar>
+            <section className="score-cont">
+              <p>
+                Your score:{' '}
+                {((100 * correctAnswers) / questions.length).toFixed(2)}%
+              </p>
+              <p>
+                Maximum Score:{' '}
+                {((100 * currentQuestion) / questions.length).toFixed(2)}%
+              </p>
+            </section>
+            {/* <br /> */}
+            <ProgressBar style={{ height: '30px' }}>
               <ProgressBar
                 variant="success"
                 now={percentCompleted * (correctAnswers / currentQuestion)}
