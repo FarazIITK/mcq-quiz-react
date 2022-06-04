@@ -3,15 +3,17 @@ import './App.css';
 import questions from './Assets/question.json';
 import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 import { FaStar } from 'react-icons/fa';
+import { ProgressBar } from 'react-bootstrap';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-interface IQuestionData {
-  category: string;
-  type: string;
-  difficulty: string;
-  question: string;
-  correct_answer: string;
-  incorrect_answers: [string, string, string];
-}
+// interface IQuestionData {
+//   category: string;
+//   type: string;
+//   difficulty: string;
+//   question: string;
+//   correct_answer: string;
+//   incorrect_answers: [string, string, string];
+// }
 // const questions: IQuestionData[] = require('./Assets/question.json');
 
 function App() {
@@ -21,7 +23,9 @@ function App() {
   const [incorrectAnswers, setIncorrectAnswers] = useState<number>(0);
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
   const [resultMessageText, setResultMessageText] = useState<string>('');
-  const [percentCompleted, setPercentCompleted] = useState<number>(0);
+  const [percentCompleted, setPercentCompleted] = useState<number>(
+    (currentQuestion / questions.length) * 100
+  );
 
   const optionButtonHandler = (e: React.MouseEvent<HTMLElement>) => {
     console.log((e.target as any).innerText);
@@ -48,9 +52,9 @@ function App() {
     } else {
       setCurrentQuestion(newQuestion);
       setIsAnswerGiven(false);
+      setPercentCompleted((newQuestion / questions.length) * 100);
     }
     console.log('Percent: ', (currentQuestion / questions.length) * 100);
-    setPercentCompleted(currentQuestion / questions.length);
   };
 
   const shuffleArray = (array: string[]) => {
@@ -109,11 +113,6 @@ function App() {
           .map((_, index) => (
             <FaStar color="orange" />
           ))}
-        {/* {Array(5 - starColorCount)
-          .fill(undefined)
-          .map(() => (
-            <FaStar color={'gray'} />
-          ))} */}
       </span>
     );
   };
@@ -121,11 +120,11 @@ function App() {
   return (
     <div className="App">
       <h1>MCQ Quiz</h1>
-      <ProgressIndicator percentComplete={percentCompleted} />
 
       {!isTestCompleted && (
         <div>
           <br />
+          <ProgressIndicator percentComplete={percentCompleted / 100} />
           <h1>
             Question {currentQuestion} of {questions.length}
           </h1>
@@ -150,6 +149,29 @@ function App() {
           <br />
           <h4>Correct Answers: {correctAnswers}</h4>
           <h4>Incorrect Answers: {incorrectAnswers}</h4>
+          <br />
+          <ProgressBar>
+            <ProgressBar
+              striped
+              variant="success"
+              now={percentCompleted * (correctAnswers / currentQuestion)}
+              key={1}
+            />
+            <ProgressBar
+              variant="danger"
+              now={percentCompleted * (incorrectAnswers / currentQuestion)}
+              key={2}
+            />
+            <ProgressBar
+              variant="warning"
+              now={
+                percentCompleted -
+                ((correctAnswers + incorrectAnswers) / currentQuestion) *
+                  percentCompleted
+              }
+              key={3}
+            />
+          </ProgressBar>
         </div>
       )}
       {isTestCompleted && (
