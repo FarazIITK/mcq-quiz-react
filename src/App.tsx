@@ -5,6 +5,7 @@ import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 import { FaStar } from 'react-icons/fa';
 import { ProgressBar } from 'react-bootstrap';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import './styles/App.scss';
 
 // interface IQuestionData {
 //   category: string;
@@ -122,17 +123,13 @@ function App() {
       <h1>MCQ Quiz</h1>
 
       {!isTestCompleted && (
-        <div>
+        <div className="test-div">
           <br />
           <ProgressIndicator percentComplete={percentCompleted / 100} />
           <h1>
             Question {currentQuestion} of {questions.length}
           </h1>
           <h3>{decodeURIComponent(questions[currentQuestion - 1].category)}</h3>
-          <h3>
-            Difficulty:{' '}
-            {decodeURIComponent(questions[currentQuestion - 1].difficulty)}
-          </h3>
           {renderDifficultyWithStars()}
           <p>
             <b>Question:</b>
@@ -147,8 +144,8 @@ function App() {
           <br />
           <br />
           <br />
-          <h4>Correct Answers: {correctAnswers}</h4>
-          <h4>Incorrect Answers: {incorrectAnswers}</h4>
+          <h4>Your score: {(correctAnswers / questions.length) * 100}%</h4>
+          <h4>Maximum Score: {(currentQuestion / questions.length) * 100}%</h4>
           <br />
           <ProgressBar>
             <ProgressBar
