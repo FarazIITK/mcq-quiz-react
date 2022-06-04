@@ -5,7 +5,6 @@ import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 import { FaStar } from 'react-icons/fa';
 import { ProgressBar } from 'react-bootstrap';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import './styles/App.scss';
 
 // interface IQuestionData {
 //   category: string;
