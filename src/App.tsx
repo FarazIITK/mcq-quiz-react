@@ -130,24 +130,28 @@ const App = () => {
               </p>
               {renderOptions()}
             </section>
+
             <section className="prompt-cont">
               {isAnswerGiven && (
-                <h1
-                  className={
-                    resultMessageText === 'Sorry!' ? 'red-class' : 'green-class'
-                  }
-                >
-                  {resultMessageText}
-                </h1>
-              )}
-              {isAnswerGiven && (
-                <button onClick={continueButtonHandler}>
-                  {currentQuestion < questions.length
-                    ? 'Next Question'
-                    : 'End Test'}
-                </button>
+                <>
+                  <h1
+                    className={
+                      resultMessageText === 'Sorry!'
+                        ? 'red-class'
+                        : 'green-class'
+                    }
+                  >
+                    {resultMessageText}
+                  </h1>
+                  <button onClick={continueButtonHandler}>
+                    {currentQuestion < questions.length
+                      ? 'Next Question'
+                      : 'End Test'}
+                  </button>
+                </>
               )}
             </section>
+
             <br />
             <section className="score-cont">
               <p>
