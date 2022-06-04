@@ -165,9 +165,8 @@ function App() {
             <ProgressBar
               variant="warning"
               now={
-                percentCompleted -
-                ((correctAnswers + incorrectAnswers) / currentQuestion) *
-                  percentCompleted
+                100 -
+                ((correctAnswers + incorrectAnswers) / questions.length) * 100
               }
               key={3}
             />
