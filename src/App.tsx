@@ -104,10 +104,10 @@ function App() {
     }
     return (
       <span>
-        {Array(5)
+        {Array(starColorCount)
           .fill(undefined)
           .map((_, index) => (
-            <FaStar color={index < starColorCount ? 'orange' : 'gray'} />
+            <FaStar color="orange" />
           ))}
         {/* {Array(5 - starColorCount)
           .fill(undefined)
@@ -142,7 +142,7 @@ function App() {
           {renderOptions()}
 
           {isAnswerGiven && (
-            <button onClick={continueButtonHandler}>Continue</button>
+            <button onClick={continueButtonHandler}>Next Question</button>
           )}
           {isAnswerGiven && <h2>{resultMessageText}</h2>}
           <br />
