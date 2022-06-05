@@ -48,7 +48,10 @@ const App = () => {
     console.log('Percent: ', (currentQuestion / questions.length) * 100);
   };
 
+  // Function to return the JSX for the options
+  // The options are returned after shuffling in random order
   const renderOptions = () => {
+    // Options for the question
     const options = [
       questions[currentQuestion - 1].correct_answer,
       ...questions[currentQuestion - 1].incorrect_answers
@@ -101,10 +104,10 @@ const App = () => {
   return (
     <div className="App">
       <h1 className="heading-txt">MCQ Quiz</h1>
-
       {!isTestCompleted && (
         <div className="test-div">
           <br />
+          {/* This is a fluentUI component */}
           <ProgressIndicator
             percentComplete={percentCompleted / 100}
             styles={{
@@ -121,6 +124,7 @@ const App = () => {
               <small>
                 {decodeURIComponent(questions[currentQuestion - 1].category)}
               </small>
+              {/* Renders JSX for the stars */}
               {renderDifficultyWithStars()}
             </header>
             <section className="question-section">
@@ -128,9 +132,11 @@ const App = () => {
                 {/* <b>Question:</b> */}
                 {decodeURIComponent(questions[currentQuestion - 1].question)}
               </p>
+              {/* Displays the options for the question */}
               {renderOptions()}
             </section>
 
+            {/* This section displays the result of a question */}
             <section className="prompt-cont">
               {isAnswerGiven && (
                 <>
@@ -153,7 +159,8 @@ const App = () => {
             </section>
 
             <br />
-            <section className="score-cont">
+            {/* This section is for score count */}
+            <section className="score-count">
               <p>
                 Your score:{' '}
                 {((100 * correctAnswers) / questions.length).toFixed(2)}%
@@ -164,6 +171,7 @@ const App = () => {
               </p>
             </section>
             {/* <br /> */}
+            {/* This is a react-bootstrap component */}
             <ProgressBar style={{ height: '30px' }}>
               <ProgressBar
                 variant="success"
@@ -187,9 +195,10 @@ const App = () => {
           </section>
         </div>
       )}
+      {/* Display this JSX when the test is completed */}
       {isTestCompleted && (
-        <div>
-          <h1>Test Completed</h1>
+        <div className="result-div">
+          <h1 className="heading">Test Completed</h1>
           <h3>Total Questions: {questions.length}</h3>
           <h3>Correct Answers: {correctAnswers}</h3>
           <h3>Incorrect Answers: {incorrectAnswers}</h3>

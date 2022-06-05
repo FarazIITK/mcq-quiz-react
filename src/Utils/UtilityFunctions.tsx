@@ -1,3 +1,4 @@
+// This will shuffle the options
 export const shuffleArray = (array: string[]) => {
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
